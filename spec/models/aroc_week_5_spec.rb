@@ -31,9 +31,7 @@ describe 'ActiveRecord Obstacle Course, Week 5' do
     # ------------------------------------------------------------
 
     # ------------------ ActiveRecord Solution ----------------------
-    # Solution goes here
-    # When you find a solution, experiment with adjusting your method chaining
-    # Which ones are you able to switch around without relying on Ruby's Enumerable methods?
+    ordered_items_names = Item.joins(:order_items).where('order_items.item_id = items.id').distinct.order(:name).pluck(:name)
     # ---------------------------------------------------------------
 
     # Expectations
@@ -41,7 +39,7 @@ describe 'ActiveRecord Obstacle Course, Week 5' do
     expect(ordered_items_names).to_not include(unordered_items)
   end
 
-  xit '27. returns a table of information for all users orders' do
+  it '27. returns a table of information for all users orders' do
     custom_results = [@user_3, @user_1, @user_2]
 
     # using a single ActiveRecord call, fetch a joined object that mimics the
@@ -54,6 +52,7 @@ describe 'ActiveRecord Obstacle Course, Week 5' do
 
     # ------------------ ActiveRecord Solution ----------------------
     custom_results = []
+    # User.joins(:orders, :order_items).select('sum(item.id) FROM order_items WHERE orders.user_id = users.id AND order_items.order_id = orders.id')
     # ---------------------------------------------------------------
 
     expect(custom_results[0].name).to eq(@user_3.name)
@@ -77,6 +76,7 @@ describe 'ActiveRecord Obstacle Course, Week 5' do
 
     # ------------------ ActiveRecord Solution ----------------------
     custom_results = []
+    custom_results = Order.joins(:order_items).sum()
     # ---------------------------------------------------------------
 
     expect(custom_results[0].name).to eq(@user_2.name)
